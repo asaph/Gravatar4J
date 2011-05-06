@@ -1,0 +1,75 @@
+<project name="gravatar4j" basedir="." default="clean-build">
+
+	<property file="build.properties"/>
+
+	<path id="classpath">
+		<pathelement path="${classpath}"/>
+		<fileset dir="${junit.home}" erroronmissingdir="false">
+			<include name="junit.jar"/>
+		</fileset>
+        <dirset dir="${classes.dir}"/>
+        <dirset dir="${test.classes.dir}"/>
+	</path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+	<target name="checkjunit">
+    	<available file="${junit.home}/junit.jar" property="junit.exists"/>
+    	<fail message="Junit not found in ${junit.home}/junit.jar. Please set the junit.home property in ${basedir}/build.properties to your junit home directory." unless="junit.exists" />
+	</target>
+	
+    <target name="compile" depends="checkjunit">
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${test.classes.dir}"/>
+        <javac target="1.5" source="1.5" srcdir="${src.dir}" destdir="${classes.dir}" debug="on" debuglevel="lines,vars,source"/>
+        <javac target="1.5" source="1.5" srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="on" debuglevel="lines,vars,source" classpathref="classpath"/>
+    </target>
+
+    <target name="junit" depends="checkjunit,compile">
+    	<mkdir dir="${report.dir}"/>
+        <junit printsummary="yes" failureproperty="junit.failure">
+        	<classpath refid="classpath"/>
+        	<formatter type="plain"/>
+        	
+            <batchtest fork="yes" todir="${report.dir}">
+                <fileset dir="${test.classes.dir}" includes="**/*.class"/>
+            </batchtest>
+        </junit>
+    	<fail message="test failed" if="junit.failure" />
+    </target>
+
+    <target name="jar" depends="junit">
+        <jar destfile="${basedir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+    </target>
+
+	<target name="javadoc">
+        <delete dir="${basedir}/javadoc"/>
+		<javadoc access="public"
+			author="true"
+			destdir="${basedir}/javadoc"
+			nodeprecated="false"
+			nodeprecatedlist="false"
+			noindex="false"
+			nonavbar="false"
+			notree="false"
+			packagenames="org.asaph.gravatar"
+			source="1.6"
+			sourcepath="${src.dir}"
+			splitindex="true"
+			use="true"
+			version="true"/>
+	</target>
+
+	<target name="dist">
+        <delete file="${basedir}/gravatar4j-${version}.zip"/>
+		<zip destfile="${basedir}/gravatar4j-${version}.zip">
+		    <zipfileset prefix="gravatar4j-${version}" dir="." includes="${src.dir}/** ${test.src.dir}/** build.xml build.properties"/>
+		    <zipfileset prefix="gravatar4j-${version}" dir="${basedir}" includes="javadoc/**"/>
+		    <zipfileset prefix="gravatar4j-${version}" dir="${basedir}" includes="*.jar"/>
+		</zip>
+	</target>
+	
+    <target name="clean-build" depends="clean,javadoc,jar,dist"/>
+</project>
