@@ -23,8 +23,8 @@
     <target name="compile" depends="checkjunit">
         <mkdir dir="${classes.dir}"/>
         <mkdir dir="${test.classes.dir}"/>
-        <javac target="1.5" source="1.5" srcdir="${src.dir}" destdir="${classes.dir}" debug="on" debuglevel="lines,vars,source"/>
-        <javac target="1.5" source="1.5" srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="on" debuglevel="lines,vars,source" classpathref="classpath"/>
+        <javac target="1.6" source="1.6" srcdir="${src.dir}" destdir="${classes.dir}" debug="on" debuglevel="lines,vars,source" includeantruntime="false"/>
+        <javac target="1.6" source="1.6" srcdir="${test.src.dir}" destdir="${test.classes.dir}" debug="on" debuglevel="lines,vars,source" classpathref="classpath" includeantruntime="false"/>
     </target>
 
     <target name="junit" depends="checkjunit,compile">
