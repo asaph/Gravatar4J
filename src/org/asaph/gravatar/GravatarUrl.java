@@ -37,7 +37,7 @@ import java.io.Serializable;
  *
  * The above code outputs:
  * 
- * <blockquote><pre><code>http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg?s=512&amp;r=pg&amp;d=identicon</code></pre></blockquote></p>
+ * <blockquote><pre><code>http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802.jpg?s=512&amp;r=pg&amp;d=identicon</code></pre></blockquote>
  * 
  * @author asaph
  */
